@@ -34,7 +34,7 @@ class Grafo{
     }
     
     public String recorridoProfundidad(Nodo nodoInicial) {
-      String recorrido = "Recorrido por profundidad (Inicial="+nodoInicial.getVertice()+"): ";
+      String recorrido = "Recorrido por profundidad (Inicial="+nodoInicial.getEstado()+"): ";
       List<Nodo> pila = new ArrayList<>();
       List<Arco> arquitos = new ArrayList<>();
       
@@ -48,7 +48,7 @@ class Grafo{
           pila.remove(ultimoPila);
           ultimoPila--;
           nodoActual.fueVisitado();
-          recorrido += "-> "+nodoActual.getVertice()+" ";
+          recorrido += "-> "+nodoActual.getEstado()+" ";
           
           if(arquitos!=null) {
             for(int i=0; i<arquitos.size(); i++) {

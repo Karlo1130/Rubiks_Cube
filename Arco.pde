@@ -1,4 +1,4 @@
-class Arco{
+static class Arco{
     private Nodo origen;
     private Nodo destino;
     private double distancia;
@@ -40,6 +40,6 @@ class Arco{
  
     @Override
     public String toString() {
-        return "\n \tArco [origen=" + origen.getVertice() + ", destino=" + destino.getVertice() + "]";
+        return "\n \tArco [origen=" + origen.getEstado() + ", destino=" + destino.getEstado() + "]";
     }
 }

@@ -3,20 +3,20 @@ import java.util.List;
 
 
 public class Nodo {
-    private String vertice;
+    private int[] cuboEstado = new int[27];
     private boolean visitado=false;
     public List<Arco> arcos; 
  
-    public Nodo(String vertice) {
-        this.vertice = vertice;
+    public Nodo(Cubo nodoCubo) {
+        this.cuboEstado = nodoCubo.getPosition();
     }
  
-    public String getVertice() {
-        return vertice;
+    public int[] getEstado() {
+        return cuboEstado;
     }
  
-    public void setVertice(String vertice) {
-        this.vertice = vertice;
+    public void setEstado(Cubo nodoCubo) {
+        this.cuboEstado = nodoCubo.getPosition();
     }
  
         public List<Arco> getArcos() {
@@ -46,6 +46,12 @@ public class Nodo {
  
     @Override
     public String toString() {
-        return "\nNodo [vertice=" + vertice + ", arcos=" + arcos + "]";
+      String nodo = "";
+      
+      for(int i = 0; i<27; i++){
+        nodo += "\nNodo [vertice "+i+"= " + cuboEstado[i] + ", arcos=" + arcos + "]";
+      }
+      
+        return nodo;
     }
 }

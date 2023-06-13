@@ -1,13 +1,32 @@
 import peasy.*;
+import java.util.Map;
+import java.util.Arrays;
 
 PeasyCam cam;
 
 float speed = 0.1;
-int dim = 3;
-Cubie[] cube = new Cubie[dim*dim*dim];
+//int dim = 3;
 
-int[] position = new int[27];
+boolean resolver = false;
+int contador = 0;
 
+boolean resuelto = true;
+
+  ArrayList<Cubo> visitados = new ArrayList();
+  ArrayList<Cubo> reiniciador = new ArrayList();
+
+  Cubo cuboResuelto = new Cubo();
+  
+  int[] estado = {2, 15, 6, 1, 4, 23, 8, 11, 24, 7, 10, 21, 12, 13, 14, 5, 16, 25, 0, 9, 26, 19, 22, 3, 20, 17, 18};
+
+  Cubo cubo = new Cubo();
+  Cubo nuevoCubo = new Cubo();
+  
+  Cubie[] cube = cubo.getCubies();
+  int[] position = cubo.getPosition();
+  
+  Grafo grafo = new Grafo();
+  
 Move[] allMoves = new Move[] {
   new Move(0, 1, 0, 1), 
   new Move(0, 1, 0, -1), 
@@ -24,6 +43,9 @@ Move[] allMoves = new Move[] {
 };
 
 ArrayList<Move> sequence = new ArrayList<Move>();
+
+ArrayList<Move> resolverMovimientos = new ArrayList<Move>();
+
 Shuffle shuffle;
 
 boolean started = false;
@@ -37,117 +59,13 @@ void setup() {
   cam = new PeasyCam(this, 550);
   cam.setMinimumDistance(200);
   cam.setMaximumDistance(500);
-  
-  int index = 0;
-  for (int x = -1; x <= 1; x++) {
-    for (int y = -1; y <= 1; y++) {
-      for (int z = -1; z <= 1; z++) {
-        PMatrix3D matrix = new PMatrix3D();
-        matrix.translate(x, y, z);
-        cube[index] = new Cubie(matrix, x, y, z, index);
-        position[index] = cube[index].value;
-        System.out.println("X: "+x+"\n"+
-        "Y: "+y+"\n"+
-        "Z: "+z+"\n"+
-        "index: "+index);
-        index++;
-      }
-    }
-  }
 
   currentMove = new Move(0, 0, 0, 1);
-
-  currentMove.start();
+  //currentMove = new Move(0, 0, 1, 1);
   
-  Nodo V9 = new Nodo("Nueve");
-    Nodo V8 = new Nodo("Ocho");
-        Nodo V7 = new Nodo("Siete");
-        Nodo V6 = new Nodo("Seis");
-        Nodo V5 = new Nodo("Cinco");
-        Nodo V4 = new Nodo("Cuatro");
-        Nodo V3 = new Nodo("Tres");
-        Nodo V2 = new Nodo("Dos");
-        Nodo V1 = new Nodo("Uno");
-        
-        /*Agregar conexion entre los nodos*/
-//        V8.quitarArco(V8.getArcos().get(1));
-        
-//        V1.agregarArco(new Arco(V1, V2));
-//        V1.agregarArco(new Arco(V1, V4));
-//        
-//        V2.agregarArco(new Arco(V2, V1));
-//        V2.agregarArco(new Arco(V2, V3));
-//        V2.agregarArco(new Arco(V2, V5));
-//        
-//        V3.agregarArco(new Arco(V3, V2));
-//        V3.agregarArco(new Arco(V3, V6));
-//        
-//        V4.agregarArco(new Arco(V4, V1));
-//        V4.agregarArco(new Arco(V4, V5));
-//        V4.agregarArco(new Arco(V4, V7));
-//        
-//        V5.agregarArco(new Arco(V5, V2));
-//        V5.agregarArco(new Arco(V5, V4));
-//        V5.agregarArco(new Arco(V5, V6));
-//        V5.agregarArco(new Arco(V5, V8));
-//        
-//        V6.agregarArco(new Arco(V6, V3));
-//        V6.agregarArco(new Arco(V6, V5));
-//        V6.agregarArco(new Arco(V6, V9));
-//        
-//        V7.agregarArco(new Arco(V7, V4));
-//        V7.agregarArco(new Arco(V7, V8));
-//        
-//        V8.agregarArco(new Arco(V8, V5));
-//        V8.agregarArco(new Arco(V8, V7));
-//        V8.agregarArco(new Arco(V8, V9));
-//        
-//        V9.agregarArco(new Arco(V9, V6));
-//        V9.agregarArco(new Arco(V9, V8));
-
-        /*Crear el grafo agregando los nodos*/
-        Grafo grafo = new Grafo();
-        grafo.agregarNodo(V1);
-        grafo.agregarNodo(V2);
-        grafo.agregarNodo(V3);
-        grafo.agregarNodo(V4);
-        grafo.agregarNodo(V5);
-        grafo.agregarNodo(V6);
-        grafo.agregarNodo(V7);
-        grafo.agregarNodo(V8);
-        grafo.agregarNodo(V9);
-        
-        //crear arcos
-        
-        grafo.agregarArco(new Arco(V1, V2));
-        grafo.agregarArco(new Arco(V1, V4));
-        
-        grafo.agregarArco(new Arco(V2, V5));
-        grafo.agregarArco(new Arco(V2, V3));
-        
-        grafo.agregarArco(new Arco(V3, V6));
-        
-        grafo.agregarArco(new Arco(V4, V5));
-        grafo.agregarArco(new Arco(V4, V7));
-        
-        grafo.agregarArco(new Arco(V5, V6));
-        grafo.agregarArco(new Arco(V5, V8));
-        
-        grafo.agregarArco(new Arco(V6, V9));
-        
-        grafo.agregarArco(new Arco(V7, V8));
-        
-        grafo.agregarArco(new Arco(V8, V9));
-        
-        grafo.quitarArco(grafo.getArcos().remove(3));
-        grafo.quitarArco(grafo.getArcos().remove(6));
-        grafo.quitarArco(grafo.getArcos().remove(9));
-        
-        /*imprimir la informacion del grafo*/
-        System.out.println(grafo);
-        System.out.println("\n");
-        
-        System.out.println(grafo.recorridoProfundidad(V8));
+  //System.out.println(grafo);
+  
+  currentMove.start();
 }
 
 void draw() {
@@ -168,8 +86,30 @@ void draw() {
   if (shuffling) {
     shuffle.update();
   }
-
-
+  
+  if (resolver) {
+    
+    if (currentMove.finished()) {
+      if (contador <= resolverMovimientos.size() - 1) {
+        currentMove = resolverMovimientos.get(contador);
+        currentMove.start();
+        contador++;
+        System.out.println("si: "+contador);
+      } else {
+        contador = 0;
+        resolverMovimientos = new ArrayList<Move>();
+        position = cuboResuelto.getPosition();
+        resolver = false;
+        System.out.println(contador);
+      }
+    }
+    //System.out.println(resolver);
+  }
+/*
+  for(int i = 0; i<27; i++){
+      System.out.println(position[i]); 
+    }
+*/
   scale(50);
   for (int i = 0; i < cube.length; i++) {
     push();
@@ -179,21 +119,24 @@ void draw() {
       rotateX(currentMove.angle);
     } else if (abs(cube[i].y) > 0 && cube[i].y == currentMove.y) {
       rotateY(-currentMove.angle);
-    }   
-    /*
-    System.out.println("X: "+cube[i].x+"\n"+
-        "Y: "+cube[i].y+"\n"+
-        "Z: "+cube[i].z+"\n");
-        */
-        /*
-        System.out.println("X: "+cube[i].x+"\n"+
-        "Y: "+cube[i].y+"\n"+
-        "Z: "+cube[i].z+"\n"+
-        "value: "+cube[i].value+"\n");
-        */
-    System.out.println("posicion secundaria");
-         System.out.println("posicion "+(i)+": "+position[i]);
+    }
     
+    //cubo.setPosition(estado);
+    
+    resuelto = Arrays.equals(cubo.getPosition(), cuboResuelto.getPosition());
+    //System.out.println(resuelto);
+    /*
+    for(int j = 0; i<26; i++){
+      System.out.println(position[j]); 
+    }
+    */
+    /*
+    if(resuelto) {
+          System.out.println("el cubo SI esta resuelto");
+        }else{
+          System.out.println("el cubo NO esta resuelto");
+        }
+    */
     cube[i].show();
     pop();
   }

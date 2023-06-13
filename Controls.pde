@@ -201,6 +201,50 @@ void applyMove(char move) {
       currentMove.start();
     }
     break;
+    
+  case 'm':
+    
+    grafo = cubo.crearGrafo(cubo, cubo.crearEstados(cubo));
+    
+    if(!visitados.isEmpty()){
+      visitados.clear();
+    }
+  
+    nuevoCubo.position = cubo.getPosition();
+    System.out.println();
+    for (int i = 0; i < 27; i++) {
+      System.out.print(cubo.getPosition()[i]+", ");
+      
+    }
+    System.out.println();
+    for (int i = 0; i < 27; i++) {
+      System.out.print(nuevoCubo.getPosition()[i]+", ");
+      
+    }
+    
+    int aux=0;
+    
+    do {
+    nuevoCubo = nuevoCubo.cuboMasCercano(nuevoCubo, grafo, visitados);
+    
+    //grafo.reiniciarGrafo();
+    grafo = nuevoCubo.crearGrafo(nuevoCubo, nuevoCubo.crearEstados(nuevoCubo));
+    
+    resuelto = Arrays.equals(nuevoCubo.getPosition(), cuboResuelto.getPosition());
+    aux++;
+    }while (!resuelto);
+    
+    System.out.println("k: "+aux);
+    
+    for (int i = 0; i < 27; i++) {
+      System.out.print(nuevoCubo.getPosition()[i]+", ");
+      
+    }
+    System.out.print("\n"+resolverMovimientos.size());
+  
+    resolver = true;
+  
+    break;
   case 's':
   case 'S':
     shuffling = true;
@@ -211,62 +255,62 @@ void applyMove(char move) {
 }
 
 void changePosition(int c0, int c1, int c2, int c3, 
-                    int c5, int c6, int c7, int c8){
-    int aux6, aux8, aux2;
-    
-    aux6 = position[c6];
-    position[c6] = position[c0];
-    
-    aux8 = position[c8];
-    position[c8] = aux6;
-    
-    aux2 = position[c2];
-    position[c2] = aux8;
-    
-    position[c0] = aux2;
-    
-    int aux3, aux7, aux5;
-    
-    aux3 = position[c3];
-    position[c3] = position[c1];
-    
-    aux7 = position[c7];
-    position[c7] = aux3;
-    
-    aux5 = position[c5];
-    position[c5] = aux7;
-    
-    position[c1] = aux5;
-    
-  }
-  
-  void changePositionReverse(int c0, int c1, int c2, int c3, 
-                    int c5, int c6, int c7, int c8){
+                        int c5, int c6, int c7, int c8){
+        int aux6, aux8, aux2;
+        
+        aux6 = position[c6];
+        position[c6] = position[c0];
+        
+        aux8 = position[c8];
+        position[c8] = aux6;
+        
+        aux2 = position[c2];
+        position[c2] = aux8;
+        
+        position[c0] = aux2;
+        
+        int aux3, aux7, aux5;
+        
+        aux3 = position[c3];
+        position[c3] = position[c1];
+        
+        aux7 = position[c7];
+        position[c7] = aux3;
+        
+        aux5 = position[c5];
+        position[c5] = aux7;
+        
+        position[c1] = aux5;
+        
+      }
+      
+      void changePositionReverse(int c0, int c1, int c2, int c3, 
+                        int c5, int c6, int c7, int c8){
 
-    int aux0, aux8, aux2;
-    
-    aux0 = position[c0];
-    position[c0] = position[c6];
-    
-    aux2 = position[c2];
-    position[c2] = aux0;
-    
-    aux8 = position[c8];
-    position[c8] = aux2;
-    
-    position[c6] = aux8;
-    
-    int aux1, aux7, aux5;
-    
-    aux1 = position[c1];
-    position[c1] = position[c3];
-    
-    aux5 = position[c5];
-    position[c5] = aux1;
+        int aux0, aux8, aux2;
+        
+        aux0 = position[c0];
+        position[c0] = position[c6];
+        
+        aux2 = position[c2];
+        position[c2] = aux0;
+        
+        aux8 = position[c8];
+        position[c8] = aux2;
+        
+        position[c6] = aux8;
+        
+        int aux1, aux7, aux5;
+        
+        aux1 = position[c1];
+        position[c1] = position[c3];
+        
+        aux5 = position[c5];
+        position[c5] = aux1;
 
-    aux7 = position[c7];
-    position[c7] = aux5;
-    
-    position[c3] = aux7;
-    
-  }
+        aux7 = position[c7];
+        position[c7] = aux5;
+        
+        position[c3] = aux7;
+        
+      }
